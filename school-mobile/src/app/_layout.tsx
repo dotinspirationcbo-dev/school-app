@@ -1,11 +1,15 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useColorScheme, Text, Pressable, StyleSheet } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import LoadingScreen from '@/components/LoadingScreen';
 import AppTabs from '@/components/app-tabs';
 import { AuthProvider, AuthContext } from '../contexts/AuthContext';
+
+SplashScreen.preventAutoHideAsync();
 
 function PushStatusBanner() {
   const { user, pushRegistered, initializing, retryPushRegistration } = useContext(AuthContext);
@@ -38,6 +42,25 @@ function PushStatusBanner() {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { initializing } = useContext(AuthContext);
+  const [appReady, setAppReady] = useState(false);
+
+  useEffect(() => {
+    const prepareApp = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // simulate loading
+      setAppReady(true);
+      await SplashScreen.hideAsync();
+    };
+
+    if (!initializing) {
+      prepareApp();
+    }
+  }, [initializing]);
+
+  if (!appReady) {
+    return <LoadingScreen />;
+  }
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>

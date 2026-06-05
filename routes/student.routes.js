@@ -6,7 +6,7 @@ router.use(auth);
 
 router.post('/students', roleCheck('admin', 'teacher'), studentController.createStudent);
 router.put('/students/:id', roleCheck('admin', 'teacher'), studentController.updateStudent);
-router.delete('/students/:id', roleCheck('admin', 'teacher'), studentController.deleteStudent);
+router.delete('/students/:id', roleCheck('admin'), studentController.deleteStudent);
 router.get('/students/:id', roleCheck('admin', 'teacher', 'student', 'parent'), studentController.getStudentById);
 router.get('/students', roleCheck('admin', 'teacher'), studentController.getAllStudents);
 

@@ -4,10 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // IMPORTANT: Replace with your PC's IP address
 // Find your IP by running: ipconfig
 // Look for "IPv4 Address: 192.168.x.x"
-const PC_IP = '192.168.1.100'; // Change this to your PC IP
+const PC_IP = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.100:5000';
 
 const api = axios.create({
-  baseURL: `http://${PC_IP}:5000`,
+  baseURL: PC_IP,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -37,15 +37,15 @@ api.interceptors.response.use(
 
         if (token) {
           const response = await axios.post(
-            `http://${PC_IP}:5000/api/auth/refresh`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+          `${PC_IP}/api/auth/refresh`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
 
           if (response.data.success && response.data.data.token) {
             const newToken = response.data.data.token;
