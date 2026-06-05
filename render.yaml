@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: school-app-api
+    name: school-backend
     env: node
     plan: free
     buildCommand: npm install
@@ -8,20 +8,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
-      - key: MONGO_URI
-        fromDatabase:
-          name: school-db
-          property: connectionString
       - key: JWT_SECRET
-        generateValue: true
-      - key: USE_MOCK_DB
-        value: "false"
-      - key: FALLBACK_TO_MOCK
-        value: "false"
-
-databases:
-  - name: school-db
-    databaseName: school_db
-    plan: free
+        sync: false
+      - key: MONGO_URI
+        sync: false
