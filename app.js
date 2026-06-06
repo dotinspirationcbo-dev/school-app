@@ -20,6 +20,9 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+// Convenience routes for backward compatibility
+app.use('/', authRoutes);
+
 app.use('/api/reports', reportRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api', studentRoutes);
